@@ -1,113 +1,130 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
+  Animated,
   View,
   Text,
-  StatusBar,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {colors, carouselData} from './constants';
 
-const App: () => React$Node = () => {
+function App() {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const sliderBackground = useRef(new Animated.Value(0)).current;
+
+  const handleBackgroundChange = (slideIndex) => {
+    Animated.spring(sliderBackground, {
+      toValue: slideIndex,
+    }).start();
+  };
+
+  const renderItem = ({item}) => {
+    return (
+      <View style={styles.snapCarouselItem}>
+        <View style={styles.carouselItemTitle}>
+          <Image style={styles.carouselItemImage} source={item.imageUrl} />
+          <Text style={styles.carouselItemTitleText}>{item.title}</Text>
+        </View>
+        <Text style={styles.descriptionText}>{item.description}</Text>
+        <TouchableOpacity style={styles.actionPanel}>
+          <Text style={styles.actionTitle}>{item.action}</Text>
+          {/* <Icon name="keyboard-arrow-right" size={20} color={colors.shipCove} /> */}
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const renderPagination = () => {
+    return (
+      <Pagination
+        dotsLength={carouselData.length}
+        activeDotIndex={activeSlide}
+        dotStyle={styles.dotStyle}
+        containerStyle={styles.paginationContainer}
+      />
+    );
+  };
+
+  const bgColor = sliderBackground.interpolate({
+    inputRange: carouselData.map((_, ind) => ind),
+    outputRange: carouselData.map((item) => item.bgColor),
+  });
+  const carouselStyle = {
+    ...styles.snapCarousel,
+    backgroundColor: bgColor,
+  };
+
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <SafeAreaView>
+      <Animated.View style={carouselStyle}>
+        <Text style={styles.dashboardTitle}>React Native Carousel</Text>
+        <View style={styles.carouselWrapper}>
+          <Carousel
+            data={carouselData}
+            renderItem={renderItem}
+            onSnapToItem={(index) => setActiveSlide(index)}
+            onScrollIndexChanged={handleBackgroundChange}
+            sliderWidth={200}
+            itemWidth={180}
+          />
+        </View>
+        {renderPagination()}
+      </Animated.View>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  snapCarousel: {
+    backgroundColor: colors.kellyGreen,
+    paddingBottom: 16,
+    paddingTop: 16,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  descriptionText: {
+    color: colors.biscay,
+    fontSize: 16,
+    paddingVertical: 16,
   },
-  body: {
-    backgroundColor: Colors.white,
+  actionPanel: {
+    flexDirection: 'row',
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
+  dashboardTitle: {
+    paddingHorizontal: 16,
+    color: colors.white,
+    fontWeight: '900',
     fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
   },
-  highlight: {
-    fontWeight: '700',
+  snapCarouselItem: {
+    height: 154,
+    borderWidth: 1,
+    borderColor: colors.greyBlue,
+    borderRadius: 5,
+    backgroundColor: colors.white,
+    padding: 16,
   },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  carouselItemTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  carouselItemTitleText: {
+    fontSize: 18,
+    color: colors.sapphire,
+    fontWeight: 'bold',
+    marginLeft: 12,
+  },
+  carouselItemImage: {
+    height: 120,
+    width: 180,
+  },
+  paginationContainer: {
+    paddingVertical: 4,
+  },
+  dotStyle: {
+    backgroundColor: colors.white,
   },
 });
 
