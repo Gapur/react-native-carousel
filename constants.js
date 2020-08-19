@@ -1,31 +1,27 @@
-import {images} from './assets';
+import React from 'react';
+import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 export const carouselData = [
   {
-    title: 'Direct bestellen',
-    description:
-      'Bestel hier direct alle materialen die u nodig heeft voor uw opdrachten',
-    action: 'Naar bestellen',
+    title: 'Facebook',
+    description: 'Connect with friends and the world around you on Facebook.',
     onActionPress: 'Catalog',
-    imageUrl: images.facebook,
-    bgColor: '#1BAAE6',
+    renderIcon: () => <AwesomeIcon name="facebook-square" size={28} />,
+    bgColor: '#3B5998',
   },
   {
-    title: 'Liever chatten?',
+    title: 'WhatsApp',
     description:
-      'Aarzel niet om vragen te stellen of te bestellen via WhatsApp',
-    action: 'App ons',
+      'With WhatsApp, you will get fast, simple, secure messaging and calling for free*, available on phones all over the world.',
     onActionPress: 'WhatsApp',
-    imageUrl: images.whatsapp,
-    bgColor: '#6BCD28',
+    renderIcon: () => <AwesomeIcon name="whatsapp" size={28} />,
+    bgColor: '#43d854',
   },
   {
-    title: 'Fotobestellen',
-    description: 'Maak een foto en wij maken de bestelling',
-    action: 'Maak een foto',
-    imageUrl: images.instagram,
-    bgColor: '#00427E',
-    isPhotoOrderItem: true,
+    title: 'Instagram',
+    description: 'Bringing you closer to the people and things you love.',
+    renderIcon: () => <AwesomeIcon name="instagram" size={28} />,
+    bgColor: '#C13584',
   },
 ];
 

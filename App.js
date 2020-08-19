@@ -5,12 +5,15 @@ import {
   Animated,
   View,
   Text,
-  TouchableOpacity,
-  Image,
+  Dimensions,
 } from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 
 import {colors, carouselData} from './constants';
+
+export const SCREEN_WIDTH = Dimensions.get('window').width;
+export const CAROUSEL_VERTICAL_OUTPUT = 56;
+export const CAROUSEL_ITEM_WIDTH = SCREEN_WIDTH - CAROUSEL_VERTICAL_OUTPUT;
 
 function App() {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -26,14 +29,10 @@ function App() {
     return (
       <View style={styles.snapCarouselItem}>
         <View style={styles.carouselItemTitle}>
-          <Image style={styles.carouselItemImage} source={item.imageUrl} />
+          {item.renderIcon()}
           <Text style={styles.carouselItemTitleText}>{item.title}</Text>
         </View>
         <Text style={styles.descriptionText}>{item.description}</Text>
-        <TouchableOpacity style={styles.actionPanel}>
-          <Text style={styles.actionTitle}>{item.action}</Text>
-          {/* <Icon name="keyboard-arrow-right" size={20} color={colors.shipCove} /> */}
-        </TouchableOpacity>
       </View>
     );
   };
@@ -68,8 +67,8 @@ function App() {
             renderItem={renderItem}
             onSnapToItem={(index) => setActiveSlide(index)}
             onScrollIndexChanged={handleBackgroundChange}
-            sliderWidth={200}
-            itemWidth={180}
+            sliderWidth={SCREEN_WIDTH}
+            itemWidth={CAROUSEL_ITEM_WIDTH}
           />
         </View>
         {renderPagination()}
