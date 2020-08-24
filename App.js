@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {StyleSheet, Animated, View, Text} from 'react-native';
+import {StyleSheet, Animated, View, Text, Image, FlatList} from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
@@ -8,6 +8,7 @@ import {
   carouselData,
   SCREEN_WIDTH,
   CAROUSEL_ITEM_WIDTH,
+  USERS,
 } from './constants';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
   const handleBackgroundChange = (slideIndex) => {
     Animated.spring(sliderBackground, {
       toValue: slideIndex,
+      useNativeDriver: false,
     }).start();
   };
 
@@ -39,6 +41,13 @@ function App() {
     />
   );
 
+  const renderListItem = ({item}) => (
+    <View key={item.id} style={styles.card}>
+      <Image style={styles.avatar} source={{uri: item.avatar}} />
+      <Text style={styles.fullNameText}>{item.fullName}</Text>
+    </View>
+  );
+
   const bgColor = sliderBackground.interpolate({
     inputRange: carouselData.map((_, ind) => ind),
     outputRange: carouselData.map((item) => item.bgColor),
@@ -50,7 +59,7 @@ function App() {
   };
 
   return (
-    <View>
+    <View style={styles.screen}>
       <Animated.View style={carouselStyle}>
         <Text style={styles.titleText}>React Native Carousel</Text>
         <View style={styles.carouselWrapper}>
@@ -65,11 +74,20 @@ function App() {
         </View>
         {renderPagination()}
       </Animated.View>
+      <FlatList
+        data={USERS}
+        keyExtractor={(user) => String(user.id)}
+        renderItem={renderListItem}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    marginBottom: 28,
+  },
   snapCarousel: {
     backgroundColor: colors.kellyGreen,
     paddingBottom: 16,
@@ -110,6 +128,34 @@ const styles = StyleSheet.create({
   },
   dotStyle: {
     backgroundColor: colors.white,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#402583',
+    backgroundColor: colors.white,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 1,
+    borderRadius: 10,
+    marginHorizontal: 12,
+    marginTop: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  avatar: {
+    height: 54,
+    width: 54,
+    resizeMode: 'contain',
+    borderRadius: 54 / 2,
+  },
+  fullNameText: {
+    fontSize: 16,
+    marginLeft: 24,
   },
 });
 

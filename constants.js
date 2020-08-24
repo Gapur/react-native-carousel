@@ -1,6 +1,7 @@
 import React from 'react';
 import {Dimensions} from 'react-native';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import faker from 'faker';
 
 export const carouselData = [
   {
@@ -28,7 +29,16 @@ export const colors = {
   kellyGreen: '#6BCD28',
   shipCove: '#7A8EB1',
   white: '#FFFFFF',
+  biscay: '#2B3857',
 };
+
+export const USERS = Array(10)
+  .fill(null)
+  .map((_, idx) => ({
+    id: idx,
+    avatar: faker.image.avatar(),
+    fullName: `${faker.name.firstName()} ${faker.name.lastName()}`,
+  }));
 
 export const SCREEN_WIDTH = Dimensions.get('window').width;
 export const CAROUSEL_VERTICAL_OUTPUT = 56;
