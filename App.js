@@ -1,19 +1,14 @@
 import React, {useRef, useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Animated,
-  View,
-  Text,
-  Dimensions,
-} from 'react-native';
+import {StyleSheet, Animated, View, Text} from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 
-import {colors, carouselData} from './constants';
-
-export const SCREEN_WIDTH = Dimensions.get('window').width;
-export const CAROUSEL_VERTICAL_OUTPUT = 56;
-export const CAROUSEL_ITEM_WIDTH = SCREEN_WIDTH - CAROUSEL_VERTICAL_OUTPUT;
+import {
+  colors,
+  carouselData,
+  SCREEN_WIDTH,
+  CAROUSEL_ITEM_WIDTH,
+} from './constants';
 
 function App() {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -25,42 +20,39 @@ function App() {
     }).start();
   };
 
-  const renderItem = ({item}) => {
-    return (
-      <View style={styles.snapCarouselItem}>
-        <View style={styles.carouselItemTitle}>
-          {item.renderIcon()}
-          <Text style={styles.carouselItemTitleText}>{item.title}</Text>
-        </View>
-        <Text style={styles.descriptionText}>{item.description}</Text>
+  const renderItem = ({item}) => (
+    <View style={styles.snapCarouselItem}>
+      <View style={styles.carouselItemTitle}>
+        {item.renderIcon()}
+        <Text style={styles.carouselItemTitleText}>{item.title}</Text>
       </View>
-    );
-  };
+      <Text style={styles.descriptionText}>{item.description}</Text>
+    </View>
+  );
 
-  const renderPagination = () => {
-    return (
-      <Pagination
-        dotsLength={carouselData.length}
-        activeDotIndex={activeSlide}
-        dotStyle={styles.dotStyle}
-        containerStyle={styles.paginationContainer}
-      />
-    );
-  };
+  const renderPagination = () => (
+    <Pagination
+      dotsLength={carouselData.length}
+      activeDotIndex={activeSlide}
+      dotStyle={styles.dotStyle}
+      containerStyle={styles.paginationContainer}
+    />
+  );
 
   const bgColor = sliderBackground.interpolate({
     inputRange: carouselData.map((_, ind) => ind),
     outputRange: carouselData.map((item) => item.bgColor),
   });
+
   const carouselStyle = {
     ...styles.snapCarousel,
     backgroundColor: bgColor,
   };
 
   return (
-    <SafeAreaView>
+    <View>
       <Animated.View style={carouselStyle}>
-        <Text style={styles.dashboardTitle}>React Native Carousel</Text>
+        <Text style={styles.titleText}>React Native Carousel</Text>
         <View style={styles.carouselWrapper}>
           <Carousel
             data={carouselData}
@@ -73,7 +65,7 @@ function App() {
         </View>
         {renderPagination()}
       </Animated.View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -81,18 +73,16 @@ const styles = StyleSheet.create({
   snapCarousel: {
     backgroundColor: colors.kellyGreen,
     paddingBottom: 16,
-    paddingTop: 16,
+    paddingTop: 8 + getStatusBarHeight(),
   },
   descriptionText: {
     color: colors.biscay,
     fontSize: 16,
     paddingVertical: 16,
   },
-  actionPanel: {
-    flexDirection: 'row',
-  },
-  dashboardTitle: {
+  titleText: {
     paddingHorizontal: 16,
+    paddingBottom: 12,
     color: colors.white,
     fontWeight: '900',
     fontSize: 18,
@@ -112,12 +102,8 @@ const styles = StyleSheet.create({
   carouselItemTitleText: {
     fontSize: 18,
     color: colors.sapphire,
-    fontWeight: 'bold',
+    fontWeight: '600',
     marginLeft: 12,
-  },
-  carouselItemImage: {
-    height: 120,
-    width: 180,
   },
   paginationContainer: {
     paddingVertical: 4,

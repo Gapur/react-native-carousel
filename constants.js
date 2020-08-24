@@ -1,11 +1,11 @@
 import React from 'react';
+import {Dimensions} from 'react-native';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 export const carouselData = [
   {
     title: 'Facebook',
     description: 'Connect with friends and the world around you on Facebook.',
-    onActionPress: 'Catalog',
     renderIcon: () => <AwesomeIcon name="facebook-square" size={28} />,
     bgColor: '#3B5998',
   },
@@ -13,7 +13,6 @@ export const carouselData = [
     title: 'WhatsApp',
     description:
       'With WhatsApp, you will get fast, simple, secure messaging and calling for free*, available on phones all over the world.',
-    onActionPress: 'WhatsApp',
     renderIcon: () => <AwesomeIcon name="whatsapp" size={28} />,
     bgColor: '#43d854',
   },
@@ -30,3 +29,7 @@ export const colors = {
   shipCove: '#7A8EB1',
   white: '#FFFFFF',
 };
+
+export const SCREEN_WIDTH = Dimensions.get('window').width;
+export const CAROUSEL_VERTICAL_OUTPUT = 56;
+export const CAROUSEL_ITEM_WIDTH = SCREEN_WIDTH - CAROUSEL_VERTICAL_OUTPUT;
