@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="700"src="https://github.com/Gapur/react-native-carousel/blob/master/assets/example.gif">
+  <img width="320"src="https://github.com/Gapur/react-native-carousel/blob/master/assets/example.gif">
 </p>
 
 # React Native Carousel
